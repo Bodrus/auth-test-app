@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -13,7 +13,6 @@ export const useLoginForm = () => {
   const { login } = useAuth();
   const { t, i18n } = useTranslation();
   const [serverError, setServerError] = useState<string | null>(null);
-  const submittingRef = useRef(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- recreate schema when locale changes
   const schema = useMemo(() => createLoginSchema(), [i18n.language]);
@@ -49,17 +48,7 @@ export const useLoginForm = () => {
     setServerError(null);
   }, []);
 
-  const onSubmit = form.handleSubmit(async (data) => {
-    if (submittingRef.current) return;
-    submittingRef.current = true;
-    try {
-      await mutation.mutateAsync(data);
-    } catch {
-      // Error already handled by onError callback
-    } finally {
-      submittingRef.current = false;
-    }
-  });
+  const onSubmit = form.handleSubmit((data) => mutation.mutate(data));
 
   return {
     form,

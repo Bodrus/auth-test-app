@@ -33,6 +33,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAuthState({ status: 'authenticated', user, tokens });
   }, []);
 
+  // Stable ref so useEffect doesn't re-run when logout identity changes
+  const logoutRef = useRef(logout);
+  logoutRef.current = logout;
+
   useEffect(() => {
     if (!controlsRef.current) {
       controlsRef.current = setupInterceptors({
@@ -46,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           return data.accessToken;
         },
         onRefreshFailed: () => {
-          void logout();
+          void logoutRef.current();
         },
       });
     }
@@ -90,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         controlsRef.current = null;
       }
     };
-  }, [logout]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ authState, login, logout }}>

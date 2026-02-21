@@ -21,7 +21,9 @@ export const useProfileQuery = () => {
   });
 
   const isAuthError =
-    query.error instanceof AxiosError && query.error.response?.status === 401;
+    query.error instanceof AxiosError &&
+    query.error.response?.status === 401 &&
+    !query.isFetching;
 
   useEffect(() => {
     if (isAuthError && isAuthenticated) {
