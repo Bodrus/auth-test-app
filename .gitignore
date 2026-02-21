@@ -38,6 +38,15 @@ yarn-error.*
 
 app-example
 
+# test coverage
+coverage/
+
+# IDE
+.idea/
+
+# env
+.env
+
 # generated native folders
 /ios
 /android

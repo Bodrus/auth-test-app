@@ -7,4 +7,10 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'import/no-named-as-default-member': 'off',
+    },
+  },
 ]);
